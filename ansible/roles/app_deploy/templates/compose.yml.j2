@@ -31,7 +31,7 @@ services:
   frontend:
     image: {{ app_name }}-frontend:{{ app_version }}
     ports:
-      - "{{ app_http_port }}:80"
+      - "{{ app_http_bind }}:{{ app_http_port }}:80"
     depends_on:
       - backend
     restart: unless-stopped
