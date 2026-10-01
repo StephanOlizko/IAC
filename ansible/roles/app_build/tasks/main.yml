@@ -1,0 +1,19 @@
+- name: Build images
+  community.docker.docker_image_build:
+    name: "{{ app_name }}-{{ item }}"
+    tag: "{{ app_version }}"
+    path: "{{ app_build_src_dir }}/{{ item }}"
+    platform: "{{ app_platform }}"
+  loop: "{{ app_components }}"
+
+- name: Ensure artifacts directory exists
+  ansible.builtin.file:
+    path: "{{ app_artifacts_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Export images to archives
+  community.docker.docker_image_export:
+    names: "{{ app_name }}-{{ item }}:{{ app_version }}"
+    path: "{{ app_artifacts_dir }}/{{ app_name }}-{{ item }}-{{ app_version }}.tar"
+  loop: "{{ app_components }}"

@@ -1,0 +1,1 @@
+app_build_src_dir: "{{ playbook_dir }}/../../app"

@@ -1,0 +1,5 @@
+- name: Build application images
+  hosts: build_hosts
+  become: true
+  roles:
+    - app_build

@@ -1,0 +1,8 @@
+app_name: counter
+app_version: "{{ lookup('ansible.builtin.pipe', 'git -C ' ~ playbook_dir ~ ' rev-parse --short HEAD') }}"
+app_components:
+  - db
+  - backend
+  - frontend
+app_platform: linux/amd64
+app_artifacts_dir: "{{ playbook_dir }}/../.artifacts"
