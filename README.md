@@ -23,7 +23,7 @@ docker compose up --build
 ```bash
 cd ansible
 ansible-galaxy collection install -r requirements.yml
-# пароль Vault берётся из .vault_pass (не в git), смена: ansible-vault rekey
+echo "vIhNR7XfgEd0GOHnFD+CcOcbZ8/7yy0CiEfrA4qUdB8=" > .vault_pass
 
 ansible-playbook playbooks/docker.yml      # установить Docker на сервер
 ansible-playbook playbooks/build.yml -K    # собрать и экспортировать образы локально
