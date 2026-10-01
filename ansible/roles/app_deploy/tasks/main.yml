@@ -1,3 +1,10 @@
+- name: Ensure image archives are built
+  ansible.builtin.assert:
+    that: (app_artifacts_dir ~ '/' ~ app_name ~ '-' ~ item ~ '-' ~ app_version ~ '.tar') is file
+    fail_msg: "Archive for {{ item }}:{{ app_version }} not found, run playbooks/build.yml first"
+    quiet: true
+  loop: "{{ app_components }}"
+
 - name: Create deploy directories
   ansible.builtin.file:
     path: "{{ item }}"

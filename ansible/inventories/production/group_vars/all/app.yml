@@ -1,5 +1,5 @@
 app_name: counter
-app_version: "{{ lookup('ansible.builtin.pipe', 'git -C ' ~ playbook_dir ~ ' rev-parse --short HEAD') }}"
+app_version: "{{ lookup('ansible.builtin.pipe', 'git -C ' ~ playbook_dir ~ ' rev-parse --short HEAD:app') }}"
 app_components:
   - db
   - backend
