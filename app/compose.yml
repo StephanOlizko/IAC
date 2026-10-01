@@ -1,0 +1,42 @@
+services:
+  db:
+    build: ./db
+    image: counter-db:${APP_VERSION:-latest}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?}
+      MYSQL_DATABASE: ${DB_NAME:-counter}
+      MYSQL_USER: ${DB_USER:-counter}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    image: counter-backend:${APP_VERSION:-latest}
+    environment:
+      DB_HOST: db
+      DB_NAME: ${DB_NAME:-counter}
+      DB_USER: ${DB_USER:-counter}
+      DB_PASSWORD: ${DB_PASSWORD:?}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    image: counter-frontend:${APP_VERSION:-latest}
+    ports:
+      - "${HTTP_PORT:-8080}:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  db_data:

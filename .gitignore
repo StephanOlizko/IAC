@@ -1,0 +1,7 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+ansible/.vault_pass
+ansible/collections/
+ansible/.artifacts/

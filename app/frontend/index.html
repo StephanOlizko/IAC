@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Счётчик</title>
+  <style>
+    body { font-family: system-ui, sans-serif; display: grid; place-items: center; min-height: 100vh; margin: 0; background: #f4f4f5; }
+    main { text-align: center; }
+    #value { font-size: 6rem; font-weight: 700; margin: 0 0 1rem; }
+    button { font-size: 1.25rem; padding: .75rem 2rem; border: 0; border-radius: .5rem; background: #2563eb; color: #fff; cursor: pointer; }
+    button:disabled { opacity: .6; }
+  </style>
+</head>
+<body>
+  <main>
+    <p id="value">…</p>
+    <button id="btn">Нажми меня</button>
+  </main>
+  <script>
+    const value = document.getElementById("value");
+    const btn = document.getElementById("btn");
+
+    async function request(method) {
+      const res = await fetch("/api/counter", { method });
+      value.textContent = (await res.json()).value;
+    }
+
+    btn.addEventListener("click", async () => {
+      btn.disabled = true;
+      try { await request("POST"); } finally { btn.disabled = false; }
+    });
+
+    request("GET");
+  </script>
+</body>
+</html>

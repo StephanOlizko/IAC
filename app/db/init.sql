@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS counter (
+    id    INT PRIMARY KEY,
+    value BIGINT NOT NULL DEFAULT 0
+);
+
+INSERT IGNORE INTO counter (id, value) VALUES (1, 0);
