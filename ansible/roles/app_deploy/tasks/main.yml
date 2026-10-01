@@ -69,3 +69,7 @@
   loop: "{{ app_deploy_old_archives.files }}"
   loop_control:
     label: "{{ item.path | basename }}"
+
+- name: Show application URL
+  ansible.builtin.debug:
+    msg: "{{ app_name }} {{ app_version }} is available at {{ app_public_url }}"

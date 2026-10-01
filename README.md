@@ -32,7 +32,7 @@ ansible-playbook playbooks/deploy.yml      # доставить образы и 
 ansible-playbook playbooks/site.yml -K
 ```
 
-Приложение: https://mymanager.shitstudent.com/counter/ (через nginx на сервере, контейнер слушает 127.0.0.1:8088)
+Приложение: http://olizkostepan.shitstudent.com/counter/ (через nginx на сервере, контейнер слушает 127.0.0.1:8088)
 
 Секреты лежат в `inventories/production/group_vars/app_servers/vault.yml` (Ansible Vault):
 
