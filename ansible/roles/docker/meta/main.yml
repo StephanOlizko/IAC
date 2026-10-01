@@ -1,0 +1,10 @@
+galaxy_info:
+  author: Stepan Olizko
+  description: Install Docker Engine and Docker Compose plugin
+  license: MIT
+  min_ansible_version: "2.15"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - noble
+dependencies: []
