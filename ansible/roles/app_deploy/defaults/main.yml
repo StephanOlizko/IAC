@@ -1,0 +1,2 @@
+app_deploy_images_dir: "{{ app_deploy_dir }}/images"
+app_deploy_healthcheck_retries: 30

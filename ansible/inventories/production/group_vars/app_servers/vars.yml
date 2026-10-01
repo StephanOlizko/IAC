@@ -1,5 +1,5 @@
 app_deploy_dir: /opt/{{ app_name }}
-app_http_port: 80
+app_http_port: 8088
 app_db_name: counter
 app_db_user: counter
 app_db_password: "{{ vault_app_db_password }}"

@@ -1,0 +1,71 @@
+- name: Create deploy directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0750"
+  loop:
+    - "{{ app_deploy_dir }}"
+    - "{{ app_deploy_images_dir }}"
+
+- name: Copy image archives
+  ansible.builtin.copy:
+    src: "{{ app_artifacts_dir }}/{{ app_name }}-{{ item }}-{{ app_version }}.tar"
+    dest: "{{ app_deploy_images_dir }}/{{ app_name }}-{{ item }}-{{ app_version }}.tar"
+    mode: "0640"
+  loop: "{{ app_components }}"
+  register: app_deploy_archives
+
+- name: Load images
+  community.docker.docker_image_load:
+    path: "{{ item.dest }}"
+  loop: "{{ app_deploy_archives.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: item is changed
+
+- name: Render environment file
+  ansible.builtin.template:
+    src: env.j2
+    dest: "{{ app_deploy_dir }}/.env"
+    mode: "0600"
+  no_log: true
+
+- name: Render compose file
+  ansible.builtin.template:
+    src: compose.yml.j2
+    dest: "{{ app_deploy_dir }}/compose.yml"
+    mode: "0640"
+
+- name: Start application
+  community.docker.docker_compose_v2:
+    project_src: "{{ app_deploy_dir }}"
+    project_name: "{{ app_name }}"
+    state: present
+    pull: never
+    remove_orphans: true
+    wait: true
+
+- name: Wait for application to become healthy
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:{{ app_http_port }}/api/health"
+  register: app_deploy_health
+  until: app_deploy_health.status == 200
+  retries: "{{ app_deploy_healthcheck_retries }}"
+  delay: 2
+
+- name: Find outdated image archives
+  ansible.builtin.find:
+    paths: "{{ app_deploy_images_dir }}"
+    patterns: "*.tar"
+    excludes: "*-{{ app_version }}.tar"
+  register: app_deploy_old_archives
+
+- name: Remove outdated image archives
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ app_deploy_old_archives.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"

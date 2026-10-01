@@ -1,0 +1,6 @@
+galaxy_info:
+  author: Stepan Olizko
+  description: Deliver prebuilt images to host and run application with Docker Compose
+  license: MIT
+  min_ansible_version: "2.15"
+dependencies: []

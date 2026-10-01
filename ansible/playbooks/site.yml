@@ -1,0 +1,8 @@
+- name: Install Docker
+  ansible.builtin.import_playbook: docker.yml
+
+- name: Build application images
+  ansible.builtin.import_playbook: build.yml
+
+- name: Deploy application
+  ansible.builtin.import_playbook: deploy.yml
