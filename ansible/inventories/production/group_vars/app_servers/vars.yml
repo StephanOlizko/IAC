@@ -5,4 +5,4 @@ app_db_name: counter
 app_db_user: counter
 app_db_password: "{{ vault_app_db_password }}"
 app_db_root_password: "{{ vault_app_db_root_password }}"
-app_public_url: http://olizkostepan.shitstudent.com/counter/
+app_public_url: https://olizkostepan.shitstudent.com/counter/
